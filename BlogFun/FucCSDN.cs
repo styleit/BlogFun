@@ -159,7 +159,7 @@ namespace BlogFun
 
         private void processImage(ContentSem sem)
         {
-            string uploadImgCMDPattern = "netdisk /e \"upload {0} \\app\\PublicFiles\\img-51make\\{1}\\{2}\"";
+            string uploadImgCMDPattern = "netdisk /e \"upload \\\"{0}\\\" \\app\\PublicFiles\\img-51make\\{1}\\{2}\"";
             string filename = string.Empty;
 
             if (sem.Content.Contains("?") && sem.Content.StartsWith("http://img.blog.csdn.net/"))
@@ -194,6 +194,7 @@ namespace BlogFun
                 writer.Close();
                 responseStream.Close();
 
+                filename = System.Environment.CurrentDirectory +"\\" + filename;
                 string cmd = string.Format(uploadImgCMDPattern, filename, DateTime.Now.Year, DateTime.Now.Month);
                 Console.WriteLine("Will execute command : {0}", cmd);
                 BlogFunUtlity.ExecuteCmd(cmd);
