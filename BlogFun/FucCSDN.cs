@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace BlogFun
 {
@@ -159,7 +160,7 @@ namespace BlogFun
 
         private void processImage(ContentSem sem)
         {
-            string uploadImgCMDPattern = "netdisk /e \"upload \\\"{0}\\\" \\app\\PublicFiles\\img-51make\\{1}\\{2}\"";
+            string uploadImgCMDPattern = "netdisk /e \"upload \\\"{0}\\\" \\app\\PublicFiles\\img-zuihoude\\{1}\\{2}\"";
             string filename = string.Empty;
 
             if (sem.Content.Contains("?") && sem.Content.StartsWith("http://img.blog.csdn.net/"))
@@ -176,37 +177,62 @@ namespace BlogFun
                 filename = filename + ".jpg";
             }
             if (File.Exists(filename))
-            { }
+            {
+                string imageOnPost = "/{0}/{1}/{2}";
+                sem.Content = string.Format(imageOnPost, DateTime.Now.Year, DateTime.Now.Month, filename);
+            }
             else
             {
-                WebRequest wr = WebRequest.Create(sem.Content);
-                WebResponse response = wr.GetResponse();
-                Stream responseStream = response.GetResponseStream();
-                filename = BlogFunUtlity.filterTitle(filename);
-                Console.WriteLine("Will Save File : {0}", filename);
-                FileStream writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write);
-                byte[] buffer = new byte[1024];
-                int count = 0;
-                while ((count = responseStream.Read(buffer, 0, buffer.Length)) > 0)
+                try
                 {
-                    writer.Write(buffer, 0, count);
+                    HttpWebRequest httpReq = (HttpWebRequest)WebRequest.Create(sem.Content);
+                    HttpWebResponse httpRes = (HttpWebResponse)httpReq.GetResponse();
+                    if (httpRes.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine("Image {0} return 404 Not Found.", sem.Content);
+                    }
+                    else if (httpRes.StatusCode == HttpStatusCode.Forbidden)
+                    {
+                        Console.WriteLine("Image {0} return 403 Forbidden.", sem.Content);
+                    }
+                    else
+                    {
+                        Stream responseStream = httpRes.GetResponseStream();
+                        filename = BlogFunUtlity.filterTitle(filename);
+                        Console.WriteLine("Will Save File : {0}", filename);
+                        FileStream writer = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write);
+                        byte[] buffer = new byte[1024];
+                        int count = 0;
+                        while ((count = responseStream.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            writer.Write(buffer, 0, count);
+                        }
+                        writer.Close();
+                        responseStream.Close();
+
+                        string imageOnPost = "/{0}/{1}/{2}";
+                        sem.Content = string.Format(imageOnPost, DateTime.Now.Year, DateTime.Now.Month, filename);
+
+                        filename = System.Environment.CurrentDirectory + "\\" + filename;
+                        string cmd = string.Format(uploadImgCMDPattern, filename, DateTime.Now.Year, DateTime.Now.Month);
+                        Console.WriteLine("Will execute command : {0}", cmd);
+                        BlogFunUtlity.ExecuteCmd(cmd);
+
+                    }
                 }
-                writer.Close();
-                responseStream.Close();
+                catch (Exception ex)
+                {
 
-                filename = System.Environment.CurrentDirectory +"\\" + filename;
-                string cmd = string.Format(uploadImgCMDPattern, filename, DateTime.Now.Year, DateTime.Now.Month);
-                Console.WriteLine("Will execute command : {0}", cmd);
-                BlogFunUtlity.ExecuteCmd(cmd);
+                    Console.WriteLine(sem.Content + " meets issue: " +ex.ToString());
+                }
+                
             }
-
-            string imageOnPost = "/{0}/{1}/{2}";
-            sem.Content = string.Format(imageOnPost, DateTime.Now.Year, DateTime.Now.Month, filename);
         }
 
         private void processCode(ContentSem sem)
         {
-            Match code = regCode.Match(sem.Content);
+            string content = HttpUtility.HtmlDecode(sem.Content);
+            Match code = regCode.Match(content);
             string codePatern = "[{0}]{1}[/{2}]";
             sem.Content = string.Format(codePatern, code.Groups[1].Value, code.Groups[2].Value, code.Groups[1].Value);
         }

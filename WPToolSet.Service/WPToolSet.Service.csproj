@@ -4,26 +4,24 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{75DB963B-9979-4111-AF42-8DCF42F9EF94}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{84A306C7-23A7-44AE-82C2-CEDE327787DA}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BlogFun</RootNamespace>
-    <AssemblyName>BlogFun</AssemblyName>
+    <RootNamespace>WPToolSet.Service</RootNamespace>
+    <AssemblyName>WPToolSet.Service</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,11 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CookComputing.XmlRpcV2">
-      <HintPath>..\CookComputing.XmlRpcV2\CookComputing.XmlRpcV2.dll</HintPath>
+      <HintPath>..\..\..\..\4Work\GitHub\wpxmlrpcdotnet\WpXmlRpc\CookComputing.XmlRpcV2\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,24 +42,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlogFunUtlity.cs" />
-    <Compile Include="FucCSDN.cs" />
-    <Compile Include="Post.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PubPost.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
+    <Compile Include="WordPressApi.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WPToolSet.Entity\WPToolSet.Entity.csproj">
       <Project>{b9302aa4-789b-42ac-ad05-0db6dd52535e}</Project>
       <Name>WPToolSet.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WPToolSet.Service\WPToolSet.Service.csproj">
-      <Project>{84a306c7-23a7-44ae-82c2-cede327787da}</Project>
-      <Name>WPToolSet.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
