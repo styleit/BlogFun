@@ -41,8 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlogFunUtlity.cs" />
+    <Compile Include="FucCSDN.cs" />
+    <Compile Include="Post.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PubPost.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
