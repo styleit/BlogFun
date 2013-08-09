@@ -16,7 +16,7 @@ namespace BlogFun
         private string baseUrl = "http://blog.csdn.net/newest.html?page={0}";
         private Regex regIndex = new Regex("<div class=\"blog_list\">[\\d\\D]*?<h1>[\\d\\D]*?<a name[\\d\\D]*?href=\"(.*?)\"[\\d\\D]*?>(.*?)</a>");
         private Regex regContent = new Regex("id=\"article_content\"[\\d\\D]*?>([\\d\\D]*?)<div class=\"share_buttons\"");
-        private Regex regImage = new Regex("<img.*?src=\"(.*?)\"");
+        private Regex regImage = new Regex("<img[\\d\\D]*?src=\"([\\d\\D]*?)\"[\\d\\D]*?>");
         private Regex regCode = new Regex("<pre name=\"code\" class=\"(.*?)\">([\\d\\D]*?)</pre>");
         private Queue<Post> csdnPostQueue = null;
         private LogFlie processCsdnLog = new LogFlie("csdn_process_trace.log");
