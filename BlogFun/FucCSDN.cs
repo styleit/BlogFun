@@ -23,6 +23,12 @@ namespace BlogFun
         private StreamReader hist = new StreamReader("hist.txt");
         string[] history;
 
+        public FucCSDN()
+        {
+            string histTmp = hist.ReadToEnd().Replace("\r","");
+            history = histTmp.Split('\n');
+        }
+
         public void Process(object queue)
         {
             csdnPostQueue = (Queue<Post>)queue;
@@ -38,7 +44,6 @@ namespace BlogFun
         private void GetPostList(string url)
         {
             Console.WriteLine("Processing {0}",url);
-            history = hist.ReadToEnd().Split('\n');
             int detailIndex = url.IndexOf("details");
             string homePageUrl = url.Substring(0, detailIndex);
             string firstList = homePageUrl + "list/{0}";
@@ -118,7 +123,14 @@ namespace BlogFun
             foreach (Match codeItem in mc)
             {
                 ContentSem cs = new ContentSem("code", codeItem.Groups[0].Index, codeItem.Groups[0].Length, codeItem.Groups[0].Value);
-                markList.Add(cs);
+                if (regImage.IsMatch(cs.Content))
+                {
+                    ;
+                }
+                else {
+                    markList.Add(cs);
+                }
+                
             }
 
             StringBuilder buffer = new StringBuilder();
