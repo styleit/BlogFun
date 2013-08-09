@@ -16,6 +16,7 @@ namespace BlogFun
             PubPost Publisher = new PubPost();
             ThreadPool.QueueUserWorkItem(new WaitCallback(CSDN.Process), pubQueue);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Publisher.Process), pubQueue);
+            Console.WriteLine("AlL Done");
             Console.ReadLine();
         }
     }

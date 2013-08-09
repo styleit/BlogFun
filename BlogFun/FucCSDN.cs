@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Log;
 
 namespace BlogFun
 {
@@ -18,6 +19,9 @@ namespace BlogFun
         private Regex regImage = new Regex("<img.*?src=\"(.*?)\"");
         private Regex regCode = new Regex("<pre name=\"code\" class=\"(.*?)\">([\\d\\D]*?)</pre>");
         private Queue<Post> csdnPostQueue = null;
+        private LogFlie processCsdnLog = new LogFlie("csdn_process_trace.log");
+        private StreamReader hist = new StreamReader("hist.txt");
+        string[] history;
 
         public void Process(object queue)
         {
@@ -34,6 +38,7 @@ namespace BlogFun
         private void GetPostList(string url)
         {
             Console.WriteLine("Processing {0}",url);
+            history = hist.ReadToEnd().Split('\n');
             int detailIndex = url.IndexOf("details");
             string homePageUrl = url.Substring(0, detailIndex);
             string firstList = homePageUrl + "list/{0}";
@@ -71,6 +76,14 @@ namespace BlogFun
 
         private bool CheckHistory(BlogIndexItem item)
         {
+            foreach (string title in history)
+            {
+                if (title == item.Title)
+                {
+                    return true;
+                }
+            }
+            
             return false;
         }
 
@@ -189,10 +202,12 @@ namespace BlogFun
                     HttpWebResponse httpRes = (HttpWebResponse)httpReq.GetResponse();
                     if (httpRes.StatusCode == HttpStatusCode.NotFound)
                     {
+                        processCsdnLog.Add(string.Format("Image {0} return 404 Not Found.", sem.Content));
                         Console.WriteLine("Image {0} return 404 Not Found.", sem.Content);
                     }
                     else if (httpRes.StatusCode == HttpStatusCode.Forbidden)
                     {
+                        processCsdnLog.Add(string.Format("Image {0} return  403 Forbidden.", sem.Content));
                         Console.WriteLine("Image {0} return 403 Forbidden.", sem.Content);
                     }
                     else
@@ -215,6 +230,7 @@ namespace BlogFun
 
                         filename = System.Environment.CurrentDirectory + "\\" + filename;
                         string cmd = string.Format(uploadImgCMDPattern, filename, DateTime.Now.Year, DateTime.Now.Month);
+                        processCsdnLog.Add(string.Format("Will execute command : {0}",cmd));
                         Console.WriteLine("Will execute command : {0}", cmd);
                         BlogFunUtlity.ExecuteCmd(cmd);
 
@@ -222,7 +238,7 @@ namespace BlogFun
                 }
                 catch (Exception ex)
                 {
-
+                    processCsdnLog.Add(sem.Content + " meets issue: " +ex.ToString());
                     Console.WriteLine(sem.Content + " meets issue: " +ex.ToString());
                 }
                 

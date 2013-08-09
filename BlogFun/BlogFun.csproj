@@ -32,8 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CookComputing.XmlRpcV2">
-      <HintPath>..\CookComputing.XmlRpcV2\CookComputing.XmlRpcV2.dll</HintPath>
+    <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>External Dll\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -56,6 +57,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Log\Log.csproj">
+      <Project>{4c282fbd-cf42-4df0-8793-5fde2c5ea828}</Project>
+      <Name>Log</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WPToolSet.Entity\WPToolSet.Entity.csproj">
       <Project>{b9302aa4-789b-42ac-ad05-0db6dd52535e}</Project>
       <Name>WPToolSet.Entity</Name>
@@ -64,6 +69,12 @@
       <Project>{84a306c7-23a7-44ae-82c2-cede327787da}</Project>
       <Name>WPToolSet.Service</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="External Dll\CookComputing.XmlRpcV2.dll" />
+    <Content Include="hist.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

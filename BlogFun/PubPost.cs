@@ -6,11 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using WPToolSet.Entity;
 using WPToolSet.Service;
+using Log;
 
 namespace BlogFun
 {
     public class PubPost
     {
+        private LogFlie publishLog = new LogFlie("pub_process_trace.log");
+        private LogFlie hist = new LogFlie("hist.log");
         public void Process(object postItem)
         {
             Queue<Post> queue = (Queue<Post>)postItem;
@@ -33,7 +36,21 @@ namespace BlogFun
                     {
                         item = queue.Dequeue();
                     }
-                    SavePost(item.Title,item.Content);
+                    try
+                    {
+                        SavePost(item.Title, item.Content);
+                    }
+                    catch (Exception ex)
+                    {
+                        publishLog.Add("Wil saving post "+item.Title+" meet issue: " + ex.ToString());
+                        System.Threading.Thread.Sleep(10);
+                        lock (queue)
+                        {
+                            queue.Enqueue(item);
+                        }
+                        throw;
+                    }
+                    
                 }
 
             }
@@ -67,7 +84,8 @@ namespace BlogFun
             //content.custom_fields = cf;
 
             string PostID = WordPress.WpNewPost(0, user, password, content);
-
+            publishLog.Add("Post published : " + PostID);
+            hist.Add(title);
             Console.WriteLine("Post published : "+PostID);
             //Console.ReadLine();
         }

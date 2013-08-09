@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPToolSet.Entity", "WPToolS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPToolSet.Service", "WPToolSet.Service\WPToolSet.Service.csproj", "{84A306C7-23A7-44AE-82C2-CEDE327787DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log", "Log\Log.csproj", "{4C282FBD-CF42-4DF0-8793-5FDE2C5EA828}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{84A306C7-23A7-44AE-82C2-CEDE327787DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84A306C7-23A7-44AE-82C2-CEDE327787DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84A306C7-23A7-44AE-82C2-CEDE327787DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C282FBD-CF42-4DF0-8793-5FDE2C5EA828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C282FBD-CF42-4DF0-8793-5FDE2C5EA828}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C282FBD-CF42-4DF0-8793-5FDE2C5EA828}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C282FBD-CF42-4DF0-8793-5FDE2C5EA828}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
